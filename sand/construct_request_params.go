@@ -61,7 +61,7 @@ func ConstructRequestParams(userNo string) (req *Req, err error) {
 		return nil, err
 	}
 
-	// 4.ACE Key加密数据
+	// 4.AES Key加密数据
 	encryptedData, err := crypt.AESEncryptECB(rawData, aesKey)
 	if err != nil {
 		return nil, err

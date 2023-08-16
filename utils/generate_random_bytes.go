@@ -7,8 +7,7 @@ import (
 
 // RandomBytes 生成指定长度的随机字符串
 func RandomBytes(length int) ([]byte, error) {
-	// abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
-	const charset = "0123456789"
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	bytes := make([]byte, length)
 	if _, err := rand.Read(bytes); err != nil {
 		return nil, fmt.Errorf("randomly generate string, err: %w", err)
