@@ -20,7 +20,7 @@ func CancelAccount(userNo string) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(jsonStr))
+	fmt.Println("请求:", string(jsonStr))
 	client := http.DefaultClient
 	buff := bytes.NewBuffer(jsonStr)
 	req, err := http.NewRequest("POST", ManageMemberStatusUrl, buff)

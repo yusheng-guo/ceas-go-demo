@@ -81,7 +81,6 @@ func LoadPrivateKey(pemPath, password string) (*rsa.PrivateKey, error) {
 // LoadPublicKey 加载公钥
 func LoadPublicKey(pemPath string) (*rsa.PublicKey, error) {
 	// 1.读取公钥文件
-	fmt.Println("读取公钥文件")
 	key, err := os.ReadFile(pemPath)
 	if err != nil {
 		return nil, fmt.Errorf("read file, err: %w", err)
