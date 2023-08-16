@@ -65,20 +65,22 @@ func ConstructRequestParams(userNo string) (req *Req, err error) {
 	if err != nil {
 		return nil, err
 	}
-	// Rsa 加密 ACE Key
+	// RSA 加密 ACE Key
 	encryptedKey, err := crypt.RSAAndBase64(aceKey, "./cert/sand_public.cer")
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println("value => ", encryptedData)
-	fmt.Println("key => ", encryptedKey)
 
 	// 对数据进行 签名
 	sign, err := Sign([]byte(encryptedData))
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Println("value => ", encryptedData)
+	fmt.Println("key => ", encryptedKey)
+	fmt.Println("sign => ", sign)
+
 	return &Req{
 		Mid:             MID,
 		Sign:            sign,

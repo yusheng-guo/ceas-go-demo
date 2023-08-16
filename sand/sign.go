@@ -9,10 +9,9 @@ import (
 	"fmt"
 )
 
-// Sign 加签
+// Sign 加签  对数据进行签名
 func Sign(data []byte) (sign string, err error) {
 	h := crypto.Hash.New(crypto.SHA1)
-	// 对数据进行签名
 	_, err = h.Write(data)
 	if err != nil {
 		return "", fmt.Errorf("write data, err: %w", err)
