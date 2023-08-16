@@ -91,7 +91,7 @@ func ConstructRequestParams(userNo string) (req *Req, err error) {
 		CustomerOrderNo: orderNo,
 		SignType:        SignType,
 		EncryptType:     EncryptType,
-		EncryptKey:      encryptedData,
-		Data:            encryptedKey,
+		EncryptKey:      encryptedKey,
+		Data:            encryptedData,
 	}, nil
 }
