@@ -3,24 +3,43 @@ package crypt
 import (
 	"crypto/aes"
 	"encoding/base64"
+	"fmt"
 	"github.com/andreburgaud/crypt2go/ecb"
 	"github.com/andreburgaud/crypt2go/padding"
 )
 
+// AESEncryptECB ECB模式AES加密 并Base64编码
 func AESEncryptECB(pt, key []byte) (string, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		panic(err.Error())
+		return "", err
 	}
 	mode := ecb.NewECBEncrypter(block)
 	padder := padding.NewPkcs5Padding()
 	pt, err = padder.Pad(pt) // pad last block of plaintext if block size less than block cipher size
 	if err != nil {
-		panic(err.Error())
+		return "", err
 	}
 	ct := make([]byte, len(pt))
 	mode.CryptBlocks(ct, pt)
 	return base64.StdEncoding.EncodeToString(ct), nil
+}
+
+// AESDecryptECB ECB模式AES解密
+func AESDecryptECB(ct, key []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, fmt.Errorf("new cipher, err: %w", err)
+	}
+	mode := ecb.NewECBDecrypter(block)
+	pt := make([]byte, len(ct))
+	mode.CryptBlocks(pt, ct)
+	padder := padding.NewPkcs5Padding()
+	pt, err = padder.Unpad(pt) // unpad plaintext after decryption
+	if err != nil {
+		return nil, fmt.Errorf("padder unpad, err: %w", err)
+	}
+	return pt, nil
 }
 
 //// ECBEncrypter is an implementation of the cipher.BlockMode interface

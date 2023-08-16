@@ -66,6 +66,17 @@ func ConstructRequestParams(userNo string) (req *Req, err error) {
 	if err != nil {
 		return nil, err
 	}
+	// 解密测试
+	//encryptedDataBytes, err := base64.StdEncoding.DecodeString(encryptedData)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//decryptedData, err := crypt.AESDecryptECB(encryptedDataBytes, aesKey)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//fmt.Println(string(rawData))
+	//fmt.Println(string(decryptedData))
 	// 5.RSA算法 加密 ACE Key
 	encryptedKey, err := crypt.RSAAndBase64(aesKey, "./cert/sand_public.cer")
 	if err != nil {
