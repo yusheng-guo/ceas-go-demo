@@ -40,7 +40,9 @@ type Data struct {
 
 // ConstructRequestParams 构造请求参数
 func ConstructRequestParams(userNo string) (req *Req, err error) {
+	// 1.生成订单号
 	orderNo := utils.GenerateOrderNo()
+	// 2.构造数据
 	var data = &Data{
 		Mid:             MID,
 		CustomerOrderNo: orderNo,
@@ -48,30 +50,29 @@ func ConstructRequestParams(userNo string) (req *Req, err error) {
 		BizType:         "CLOSE",
 		NotifyUrl:       "",
 	}
-	// 序列化数据
 	rawData, err := json.Marshal(data)
 	if err != nil {
 		return nil, err
 	}
 
-	// 生成ACE Key
-	aceKey, err := utils.RandomBytes(16)
+	// 3.生成AES Key
+	aesKey, err := utils.RandomBytes(16)
 	if err != nil {
 		return nil, err
 	}
 
-	// ACE 加密数据
-	encryptedData, err := crypt.AESEncryptECB(rawData, aceKey)
+	// 4.ACE Key加密数据
+	encryptedData, err := crypt.AESEncryptECB(rawData, aesKey)
 	if err != nil {
 		return nil, err
 	}
-	// RSA 加密 ACE Key
-	encryptedKey, err := crypt.RSAAndBase64(aceKey, "./cert/sand_public.cer")
+	// 5.RSA算法 加密 ACE Key
+	encryptedKey, err := crypt.RSAAndBase64(aesKey, "./cert/sand_public.cer")
 	if err != nil {
 		return nil, err
 	}
 
-	// 对数据进行 签名
+	// 6.对数据进行 签名
 	sign, err := Sign([]byte(encryptedData))
 	if err != nil {
 		return nil, err
@@ -79,6 +80,7 @@ func ConstructRequestParams(userNo string) (req *Req, err error) {
 
 	fmt.Println("value => ", encryptedData)
 	fmt.Println("key => ", encryptedKey)
+	fmt.Println("raw key => ", string(aesKey))
 	fmt.Println("sign => ", sign)
 
 	return &Req{
