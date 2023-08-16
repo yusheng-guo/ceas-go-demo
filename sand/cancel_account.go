@@ -69,13 +69,13 @@ func ConstructRequestParams(userNo string) (req *Req, err error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("data: ", marshal)
-	var src map[string]any
-	err = json.Unmarshal(marshal, &src)
-	if err != nil {
-		return nil, err
-	}
-	value, key, err := AESEncrypt(src) // AES 加密
+	fmt.Println("data: ", string(marshal))
+	//var src map[string]any
+	//err = json.Unmarshal(marshal, &src)
+	//if err != nil {
+	//	return nil, err
+	//}
+	value, key, err := AESEncrypt(marshal) // AES 加密
 	if err != nil {
 		return nil, err
 	}
