@@ -1,6 +1,7 @@
 package sand
 
 import (
+	"ceas-go-demo/utils"
 	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
@@ -18,7 +19,7 @@ func Sign(data []byte) (sign string, err error) {
 	}
 	hashed := h.Sum(nil)
 	// 加载私钥
-	r, err := LoadPrivateKey("./cert/sand_private.pfx", "nft123456")
+	r, err := utils.LoadPrivateKey("./cert/sand_private.pfx", "nft123456")
 	if err != nil {
 		return "", fmt.Errorf("load private key, err: %w", err)
 	}

@@ -1,16 +1,24 @@
-package ecrypt
+package crypt
 
 import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"encoding/base64"
 	"unsafe"
 )
 
-func AESEncryptECB(plaintext []byte, key []byte) ([]byte, error) {
+// ECBEncrypter is an implementation of the cipher.BlockMode interface
+// that uses Electronic Codebook (ECB) mode.
+type ECBEncrypter struct {
+	b         cipher.Block
+	blockSize int
+}
+
+func AESEncryptECB(plaintext []byte, key []byte) (string, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	blockSize := block.BlockSize()
@@ -20,20 +28,14 @@ func AESEncryptECB(plaintext []byte, key []byte) ([]byte, error) {
 	ecb := NewECBEncrypter(block)
 	ecb.CryptBlocks(ciphertext, plaintext)
 
-	return ciphertext, nil
+	return base64.StdEncoding.EncodeToString(ciphertext), nil
 }
 
+// PKCS5Padding PKCS5填充
 func PKCS5Padding(data []byte, blockSize int) []byte {
 	padding := blockSize - (len(data) % blockSize)
 	padText := bytes.Repeat([]byte{byte(padding)}, padding)
 	return append(data, padText...)
-}
-
-// ECBEncrypter is an implementation of the cipher.BlockMode interface
-// that uses Electronic Codebook (ECB) mode.
-type ECBEncrypter struct {
-	b         cipher.Block
-	blockSize int
 }
 
 // NewECBEncrypter create a new ECBEncrypter.
