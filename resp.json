@@ -1,0 +1,17 @@
+{
+  "data": "LamcjvRXWAgkysuK619f8xwjF3H/eZX8C+Hbuuaj0txmiIvliptOem1myT6YhG+CnIqP6X9eP20L34jzmNqD+z0sNHv0du6VAFFbZpQ4EfHPfk2pqKwBK9j/s1y4VOOO20E0oO8z8eP0oXRQ6n32/hdYgkietjiRVp4eeyMWCTbA4DaKBYBCKqmAj0NgRfENnvWtlor+KVfUpz8Ztz4qDaY5xOkC/DvpPqipGYfz1VdW/+3J2XwXSY1RYpzjNbvR7ruMTedYVndO2Mn+Iu+YtyhV33FM8x2ib8zQ1cENV+8seG0D90a3YanoFWv9FFweybd2T9YDEhlDHQXF0aPjMLCbtDa4aMbL5zIXYGKRztg=",
+  "response":{
+    "responseDesc":"成功",
+    "responseTime":"20210507183834",
+    "mid":"6888803001476",
+    "sandSerialNo":"CEASO2021050718383009208982",
+    "responseStatus":"00",
+    "customerOrderNo":"testshiqi202105071839",
+    "version":"1.0.0",
+    "responseCode":"00000BCEAS"
+  },
+  "sign":"QlTk9rpv1JJzCL0+SeY03SNVYpQJW0QeqRAKi1cR4CJE+a/ljjTqaCOKWqJj44r1EureMFMG+g4MzR8es0vBmRNDZ4ZLFENyYapuOTT9xUNdZTHCDn8g2q4RB2reFu8nBW31WVr8ahJDWJxwkAIrCHbkZ1dXAZ0YjaNJCjBaHjDqyw2cSH+CAo7oqgJICQsPVU/PHFLVeuS/54CBGGaiImLiaxaWyS1S3pYcDn0T6SZu0ol2P4bofNYTsn2/6CUyEojt3QXjg1v5uR3T/xeJGpSHd83tdtTxn6eZFs2dKnfBagq0A8fuFzswbUWyALGf5IqTMR6mODatEYWxfPYmPw==",
+  "signType":"SHA1WithRSA",
+  "encryptKey":"UtdIn4ZIkl0BwxcTO9OvCK9UtGgx1iUCDdI0cfWFY+A7OOFlBsYjgZljanoFtXFUywHVaKzvjYiUC6CDH2qMLWpFihLB1v7UtTpSfadZtnXXHMuvrvWO6BBFhINBkWpAGCKZUKS8bSoTUbKDl0lsMLePsQ85rFjKVInGYkb/nxTF1rvcd0VR3qB7cwX68ZpTz0g36MAiSMDcSFrUb7nBIsl9ckFjqHzQldA12OB8GgJsMLoKKkht1NgINmWUpdpsg57as4E07/O0Y1lUF5ZcMauD04+CCn3i79kIrHe7xwwlnJjljNvWBf2fqNncHjKc5XEqaMAlnLG7mQtDwJjl7g==",
+  "encryptType":"AES"
+}
