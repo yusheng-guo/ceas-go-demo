@@ -29,15 +29,17 @@ func RSAEncryptECB(key []byte, path string) (string, error) {
 	return base64.StdEncoding.EncodeToString(encryptKeyBytes), nil
 }
 
+const RESERVE_SIZE = 11
+
 // encrypt 分块加密
 func encrypt(plainText []byte, publicKey *rsa.PublicKey) ([]byte, error) {
 	keySize := publicKey.Size()
-	encryptBlockSize := keySize - 11
+	encryptBlockSize := keySize - RESERVE_SIZE // 加密块大小
 
-	nBlock := len(plainText) / encryptBlockSize
-	if len(plainText)%encryptBlockSize != 0 {
-		nBlock++
-	}
+	//nBlock := len(plainText) / encryptBlockSize
+	//if len(plainText)%encryptBlockSize != 0 {
+	//	nBlock++
+	//}
 
 	encrypted := make([]byte, 0)
 
@@ -46,12 +48,11 @@ func encrypt(plainText []byte, publicKey *rsa.PublicKey) ([]byte, error) {
 		if end > len(plainText) {
 			end = len(plainText)
 		}
-
+		fmt.Println(end - offset)
 		block, err := rsa.EncryptPKCS1v15(rand.Reader, publicKey, plainText[offset:end])
 		if err != nil {
 			return nil, err
 		}
-
 		encrypted = append(encrypted, block...)
 	}
 

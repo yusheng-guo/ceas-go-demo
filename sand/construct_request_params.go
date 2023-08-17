@@ -89,9 +89,10 @@ func ConstructRequestParams(userNo string) (req *Req, err error) {
 		return nil, err
 	}
 
-	fmt.Println("value => ", encryptedData)
-	fmt.Println("key => ", encryptedKey)
-	fmt.Println("raw key => ", string(aesKey))
+	fmt.Println("data => ", rawData)
+	fmt.Println("key => ", string(aesKey))
+	fmt.Println("encrypted data => ", encryptedData)
+	fmt.Println("encrypted key => ", encryptedKey)
 	fmt.Println("sign => ", sign)
 
 	return &Req{
