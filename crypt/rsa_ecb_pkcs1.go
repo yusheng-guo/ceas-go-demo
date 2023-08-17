@@ -34,6 +34,7 @@ const RESERVE_SIZE = 11
 // encrypt 分块加密
 func encrypt(plainText []byte, publicKey *rsa.PublicKey) ([]byte, error) {
 	keySize := publicKey.Size()
+	fmt.Println(keySize)
 	encryptBlockSize := keySize - RESERVE_SIZE // 加密块大小
 
 	//nBlock := len(plainText) / encryptBlockSize
