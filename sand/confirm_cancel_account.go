@@ -8,11 +8,11 @@ import (
 	"net/http"
 )
 
-const ManageMemberStatusUrl = "https://cap.sandpay.com.cn/v4/elecaccount/ceas.elec.account.member.status.modify"
+const ConfirmCancelAccountUrl = "https://cap.sandpay.com.cn/v4/elecaccount/ceas.elec.account.member.modify.confirm"
 
-// CancelAccount 杉德云账户注销 销户
-func CancelAccount(userNo string) string {
-	reqBody, err := ConstructCancelAccountRequestParams(userNo)
+// ConfirmCancelAccount 确认销户 captcha 验证码 oriCustomerOrderNo 原订单号
+func ConfirmCancelAccount(captcha, userNo, oriCustomerOrderNo string) {
+	reqBody, err := ConstructConfirmRequestParams(captcha, userNo, oriCustomerOrderNo)
 	if err != nil {
 		panic(err)
 	}
@@ -22,7 +22,7 @@ func CancelAccount(userNo string) string {
 	}
 	client := http.DefaultClient
 	buff := bytes.NewBuffer(jsonStr)
-	req, err := http.NewRequest("POST", ManageMemberStatusUrl, buff)
+	req, err := http.NewRequest("POST", ConfirmCancelAccountUrl, buff)
 	if err != nil {
 		panic(err)
 	}
@@ -42,5 +42,5 @@ func CancelAccount(userNo string) string {
 		panic(err)
 	}
 	fmt.Println("响应:", string(respBody))
-	return reqBody.CustomerOrderNo
+	return
 }

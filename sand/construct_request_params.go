@@ -29,8 +29,8 @@ type Req struct {
 	Data            string `json:"data"`            // 使用16位随机数对明文参数进行AES加密(AES/ECB/PKCS5Padding) 加密结果采用base64编码
 }
 
-// Data 销户请求数据
-type Data struct {
+// CancelAccountData 销户请求数据
+type CancelAccountData struct {
 	Mid             string `json:"mid"`             // 商户号
 	CustomerOrderNo string `json:"customerOrderNo"` // 商户订单号
 	BizUserNo       string `json:"bizUserNo"`       // 会员编号 需要注销的会员
@@ -38,17 +38,28 @@ type Data struct {
 	NotifyUrl       string `json:"notifyUrl"`       // 异步通知地址
 }
 
-// ConstructRequestParams 构造请求参数
-func ConstructRequestParams(userNo string) (req *Req, err error) {
+// ConfirmData 确认销户请求数据
+type ConfirmData struct {
+	Mid                string `json:"mid"`                // 商户号
+	CustomerOrderNo    string `json:"customerOrderNo"`    // 商户订单号
+	BizUserNo          string `json:"bizUserNo"`          // 会员编号 需要注销的会员
+	OriCustomerOrderNo string `json:"oriCustomerOrderNo"` // 原交易订单号
+	SmsCode            string `json:"smsCode"`            // 注销短信验证码
+}
+
+//https://api.dev.zijinwenchuang.com/callback/account_callback
+
+// ConstructCancelAccountRequestParams 构造销户请求参数
+func ConstructCancelAccountRequestParams(userNo string) (req *Req, err error) {
 	// 1.生成订单号
 	orderNo := utils.GenerateOrderNo()
 	// 2.构造数据
-	var data = &Data{
+	var data = &CancelAccountData{
 		Mid:             MID,
 		CustomerOrderNo: orderNo,
 		BizUserNo:       userNo,
-		BizType:         "CLOSE",
-		NotifyUrl:       "https://api.dev.zijinwenchuang.com/callback/account_callback",
+		BizType:         "CLOSE", // CLOSE
+		NotifyUrl:       "https://api.dev.zijinwenchuang.com/ca",
 	}
 	rawData, err := json.Marshal(data)
 	if err != nil {
@@ -62,6 +73,7 @@ func ConstructRequestParams(userNo string) (req *Req, err error) {
 	}
 
 	// 4.AES Key加密数据
+	fmt.Println(len(rawData))
 	encryptedData, err := crypt.AESEncryptECB(rawData, aesKey)
 	if err != nil {
 		return nil, err
@@ -89,11 +101,123 @@ func ConstructRequestParams(userNo string) (req *Req, err error) {
 		return nil, err
 	}
 
-	fmt.Println("data => ", rawData)
-	fmt.Println("key => ", string(aesKey))
-	fmt.Println("encrypted data => ", encryptedData)
-	fmt.Println("encrypted key => ", encryptedKey)
-	fmt.Println("sign => ", sign)
+	//fmt.Println("data => ", rawData)
+	//fmt.Println("key => ", string(aesKey))
+	//fmt.Println("encrypted data => ", encryptedData)
+	//fmt.Println("encrypted key => ", encryptedKey)
+	//fmt.Println("sign => ", sign)
+
+	return &Req{
+		Mid:             MID,
+		Sign:            sign,
+		Timestamp:       time.Now().Format(Layout),
+		Version:         Version,
+		CustomerOrderNo: orderNo,
+		SignType:        SignType,
+		EncryptType:     EncryptType,
+		EncryptKey:      encryptedKey,
+		Data:            encryptedData,
+	}, nil
+}
+
+func ConstructConfirmRequestParams(oriCustomerOrderNo, userNo, captcha string) (req *Req, err error) {
+	// 1.生成订单号
+	orderNo := utils.GenerateOrderNo()
+	// 2.构造数据
+	var data = &ConfirmData{
+		Mid:                MID,
+		CustomerOrderNo:    orderNo,
+		BizUserNo:          userNo,
+		SmsCode:            captcha,
+		OriCustomerOrderNo: oriCustomerOrderNo,
+	}
+	rawData, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(string(rawData))
+
+	// 3.生成AES Key
+	aesKey, err := utils.RandomBytes(16)
+	if err != nil {
+		return nil, err
+	}
+
+	// 4.AES Key加密数据
+	fmt.Println(len(rawData))
+	encryptedData, err := crypt.AESEncryptECB(rawData, aesKey)
+	if err != nil {
+		return nil, err
+	}
+	// 5.RSA算法 加密 ACE Key
+	encryptedKey, err := crypt.RSAEncryptECB(aesKey, "./cert/sand_public.cer")
+	if err != nil {
+		return nil, err
+	}
+
+	// 6.对数据进行 签名
+	sign, err := Sign([]byte(encryptedData))
+	if err != nil {
+		return nil, err
+	}
+
+	//fmt.Println("data => ", rawData)
+	//fmt.Println("key => ", string(aesKey))
+	//fmt.Println("encrypted data => ", encryptedData)
+	//fmt.Println("encrypted key => ", encryptedKey)
+	//fmt.Println("sign => ", sign)
+
+	return &Req{
+		Mid:             MID,
+		Sign:            sign,
+		Timestamp:       time.Now().Format(Layout),
+		Version:         Version,
+		CustomerOrderNo: orderNo,
+		SignType:        SignType,
+		EncryptType:     EncryptType,
+		EncryptKey:      encryptedKey,
+		Data:            encryptedData,
+	}, nil
+}
+
+func ConstructQueryRequestParams(userNo string) (req *Req, err error) {
+	// 1.生成订单号
+	orderNo := utils.GenerateOrderNo()
+	// 2.构造数据
+	var data = &CancelAccountData{
+		Mid:             MID,
+		CustomerOrderNo: orderNo,
+		BizUserNo:       userNo,
+	}
+	rawData, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+
+	// 3.生成AES Key
+	aesKey, err := utils.RandomBytes(16)
+	if err != nil {
+		return nil, err
+	}
+
+	// 4.AES Key加密数据
+	fmt.Println(len(rawData))
+	encryptedData, err := crypt.AESEncryptECB(rawData, aesKey)
+	if err != nil {
+		return nil, err
+	}
+
+	// 5.RSA算法 加密 ACE Key
+	encryptedKey, err := crypt.RSAEncryptECB(aesKey, "./cert/sand_public.cer")
+	if err != nil {
+		return nil, err
+	}
+
+	// 6.对数据进行 签名
+	sign, err := Sign([]byte(encryptedData))
+	if err != nil {
+		return nil, err
+	}
 
 	return &Req{
 		Mid:             MID,
