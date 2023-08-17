@@ -48,7 +48,7 @@ func ConstructRequestParams(userNo string) (req *Req, err error) {
 		CustomerOrderNo: orderNo,
 		BizUserNo:       userNo,
 		BizType:         "CLOSE",
-		NotifyUrl:       "",
+		NotifyUrl:       "https://api.dev.zijinwenchuang.com/callback/account_callback",
 	}
 	rawData, err := json.Marshal(data)
 	if err != nil {
