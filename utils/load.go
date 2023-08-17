@@ -3,7 +3,6 @@ package utils
 import (
 	"crypto/rsa"
 	"crypto/x509"
-	"encoding/pem"
 	"errors"
 	"fmt"
 	"golang.org/x/crypto/pkcs12"
@@ -93,20 +92,21 @@ func LoadPublicKey(pemPath string) (*rsa.PublicKey, error) {
 	if err != nil {
 		return nil, fmt.Errorf("read file, err: %w", err)
 	}
-	block, _ := pem.Decode(certData)
-	if block == nil {
-		return nil, fmt.Errorf("failed decode PEM block")
-	}
-	// 2.解析证书
-	//cert, err := x509.ParseCertificate(certData)
-	//if err != nil {
-	//	return nil, fmt.Errorf("parse cert, err: %w", err)
-	//}
-	// 解析证书
-	cert, err := x509.ParseCertificate(block.Bytes)
+
+	// 2.解析证书 CER 格式文件
+	cert, err := x509.ParseCertificate(certData)
 	if err != nil {
 		return nil, fmt.Errorf("parse cert, err: %w", err)
 	}
+	// PEM 格式文件
+	//block, _ := pem.Decode(certData)
+	//if block == nil {
+	//	return nil, fmt.Errorf("failed decode PEM block")
+	//}
+	//cert, err := x509.ParseCertificate(block.Bytes)
+	//if err != nil {
+	//	return nil, fmt.Errorf("parse cert, err: %w", err)
+	//}
 
 	// 3.获取公钥
 	publicKey, ok := cert.PublicKey.(*rsa.PublicKey)
