@@ -42,19 +42,68 @@ func LoadPrivateKey(pemPath, password string) (*rsa.PrivateKey, error) {
 }
 
 // LoadPublicKey 加载公钥
+//
+//	func LoadPublicKey(pemPath string) (*rsa.PublicKey, error) {
+//		// 1.读取公钥文件
+//		certData, err := os.ReadFile(pemPath)
+//		if err != nil {
+//			return nil, fmt.Errorf("read file, err: %w", err)
+//		}
+//		//block, _ := pem.Decode(certData)
+//		//if block == nil {
+//		//	return nil, fmt.Errorf("decode PEM block, err: %w", err)
+//		//}
+//		// 2.解析证书
+//		cert, err := x509.ParseCertificate(certData)
+//		if err != nil {
+//			return nil, fmt.Errorf("parse cert, err: %w", err)
+//		}
+//
+//		// 验证证书的签名
+//		//err = cert.CheckSignature(cert.SignatureAlgorithm, cert.RawTBSCertificate, cert.Signature)
+//		//if err != nil {
+//		//	return nil, fmt.Errorf("check signature, err: %w", err)
+//		//}
+//
+//		// 验证证书的有效期限
+//		now := time.Now()
+//		if now.Before(cert.NotBefore) || now.After(cert.NotAfter) {
+//			// log.Fatal("Certificate is expired or not yet valid")
+//			return nil, errors.New("certificate is expired or not yet valid")
+//		}
+//
+//		// 验证证书的主题和颁发者
+//		fmt.Println(cert.Subject.CommonName)
+//		fmt.Println(cert.Issuer.CommonName)
+//		if cert.Subject.CommonName != cert.Issuer.CommonName {
+//			return nil, errors.New("certificate subject and issuer do not match")
+//		}
+//
+//		// 3.获取公钥
+//		publicKey, ok := cert.PublicKey.(*rsa.PublicKey)
+//		if !ok {
+//			return nil, errors.New("failed to get public key")
+//		}
+//		return publicKey, nil
+//	}
 func LoadPublicKey(pemPath string) (*rsa.PublicKey, error) {
 	// 1.读取公钥文件
-	key, err := os.ReadFile(pemPath)
+	certData, err := os.ReadFile(pemPath)
 	if err != nil {
 		return nil, fmt.Errorf("read file, err: %w", err)
 	}
+	//block, _ := pem.Decode(certData)
+	//if block == nil {
+	//	return nil, fmt.Errorf("failed decode PEM block")
+	//}
 	// 2.解析证书
-	certBody, err := x509.ParseCertificate(key)
+	cert, err := x509.ParseCertificate(certData)
 	if err != nil {
 		return nil, fmt.Errorf("parse cert, err: %w", err)
 	}
+
 	// 3.获取公钥
-	publicKey, ok := certBody.PublicKey.(*rsa.PublicKey)
+	publicKey, ok := cert.PublicKey.(*rsa.PublicKey)
 	if !ok {
 		return nil, errors.New("failed to get public key")
 	}
