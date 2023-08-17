@@ -6,7 +6,7 @@ import (
 )
 
 func TestRSAEncryptECB(t *testing.T) {
-	ecb, err := RSAEncryptECB([]byte("123456"), "../cert/sand_public.cer")
+	ecb, err := RSAEncryptECB([]byte("123456"), "../cert/sand_public.pem")
 	if err != nil {
 		panic(err)
 	}
