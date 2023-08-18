@@ -73,7 +73,6 @@ func ConstructCancelAccountRequestParams(userNo string) (req *Req, err error) {
 	}
 
 	// 4.AES Key加密数据
-	fmt.Println(len(rawData))
 	encryptedData, err := crypt.AESEncryptECB(rawData, aesKey)
 	if err != nil {
 		return nil, err
@@ -144,7 +143,6 @@ func ConstructConfirmRequestParams(oriCustomerOrderNo, userNo, captcha string) (
 	}
 
 	// 4.AES Key加密数据
-	fmt.Println(len(rawData))
 	encryptedData, err := crypt.AESEncryptECB(rawData, aesKey)
 	if err != nil {
 		return nil, err
@@ -201,7 +199,6 @@ func ConstructQueryRequestParams(userNo string) (req *Req, err error) {
 	}
 
 	// 4.AES Key加密数据
-	fmt.Println(len(rawData))
 	encryptedData, err := crypt.AESEncryptECB(rawData, aesKey)
 	if err != nil {
 		return nil, err

@@ -30,7 +30,6 @@ func RSAEncryptECB(key []byte, path string) (string, error) {
 // encrypt 分块加密
 func encrypt(plainText []byte, publicKey *rsa.PublicKey) ([]byte, error) {
 	keySize := publicKey.Size()
-	fmt.Println(keySize)
 	encryptBlockSize := keySize - RESERVE_SIZE // 加密块大小
 
 	encrypted := make([]byte, 0)
@@ -40,7 +39,6 @@ func encrypt(plainText []byte, publicKey *rsa.PublicKey) ([]byte, error) {
 		if end > len(plainText) {
 			end = len(plainText)
 		}
-		fmt.Println(end - offset)
 		block, err := rsa.EncryptPKCS1v15(rand.Reader, publicKey, plainText[offset:end])
 		if err != nil {
 			return nil, err
